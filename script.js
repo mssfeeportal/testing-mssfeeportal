@@ -1,4 +1,4 @@
-const BASE_URL = "https://script.google.com/macros/s/AKfycbxcNWMiwz0t37rOT-wq5512b-BhvH9aNLjgHz_0az64mU-nmtSxKDaCjCE2jtw7swTd/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbx21Y-ZjTWbsWSzzbceJJOoBHShbJrMP12GLbd95cbx-FJ9emUx3OPxjP-hi1v9vC2w/exec";
 
 let groupMembers = [];
 
@@ -386,16 +386,22 @@ function submitRequest() {
   }
 
   // ================= PAYMENT VALIDATION =================
-  if (!val("category") ||
-      !val("subCategory") ||
-      !val("paymentMode") ||
-      !val("details") ||
-      !val("dueDate") ||
-      !val("attachment")) {
+  // ================= PAYMENT VALIDATION =================
+if (!val("category") ||
+    !val("subCategory") ||
+    !val("paymentMode") ||
+    !val("details") ||
+    !val("dueDate")) {
 
-    alert("Fill all payment details");
-    return;
-  }
+  alert("Fill all payment details");
+  return;
+}
+
+// 🔹 Attachment Mandatory for BOTH request types
+if (!val("attachment")) {
+  alert("Please attach the required file before submitting.");
+  return;
+}
 
   // ================= LOADING =================
   document.getElementById("submitBtn").disabled = true;

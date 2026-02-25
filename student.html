@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Request</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body onload="loadCategories()">
+
+<div class="container">
+  <h2>Student Financial Request</h2>
+
+  <div class="section">
+
+    <!-- REQUEST TYPE -->
+    <h4>Request Type</h4>
+    <select id="requestType" onchange="handleRequestType()">
+      <option value="">Select Request Type</option>
+      <option value="Individual">Individual</option>
+      <option value="Group">Group</option>
+    </select>
+
+    <!-- GROUP COUNT -->
+    <div id="groupCountBox" style="display:none; margin-top:15px;">
+      <h4>Number of Group Members</h4>
+      <input id="groupCount" type="number" placeholder="Enter number of members">
+      <button type="button" onclick="createGroupInputs()">Next</button>
+    </div>
+
+    <!-- STUDENT DETAILS SECTION -->
+    <div id="studentDetailsBox" style="display:none; margin-top:20px;">
+
+    <!-- MAIN STUDENT (ONLY FOR INDIVIDUAL) -->
+<div id="mainStudentBox" style="display:none; margin-top:20px;">
+
+  <h4>Student Details</h4>
+  <div class="form-row">
+    <input id="mssid" placeholder="MSS ID">
+   <select id="year">
+  <option value="">Select Year</option>
+  <option value="1">1st Year</option>
+  <option value="2">2nd Year</option>
+  <option value="3">3rd Year</option>
+  <option value="4">4th Year</option>
+  <option value="5">5th Year</option>
+</select>
+  </div>
+
+  <button type="button" onclick="fetchMainStudent()">Fetch Details</button>
+
+  <div class="form-row">
+    <input id="name" placeholder="Name" disabled>
+    <input id="college" placeholder="College" disabled>
+  </div>
+
+  <div id="individualAmountBox" style="display:none;">
+    <h4>Amount</h4>
+    <input id="amount" type="number" placeholder="Enter Amount">
+  </div>
+
+</div>
+
+<!-- GROUP MEMBERS -->
+<div id="groupMembers" style="margin-top:20px;"></div>
+
+<!-- PAYMENT SECTION -->
+<div id="paymentSection" style="display:none; margin-top:20px;">
+  <h4>Payment Details</h4>
+
+  <div class="form-row">
+    <select id="category" onchange="loadSubCategories()">
+      <option value="">Select Category</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <select id="subCategory">
+      <option value="">Select Sub-Category</option>
+    </select>
+
+    <select id="paymentMode">
+      <option value="">Payment Mode</option>
+      <option value="Online">Online</option>
+      <option value="Pay to Student">Pay to Student</option>
+    </select>
+  </div>
+
+  <textarea id="details" placeholder="Request Details / Links"></textarea>
+
+  <h4>Due Date</h4>
+  <input type="date" id="dueDate">
+
+  <h4>Attachment (Google Drive Link)</h4>
+  <input type="url" id="attachment" placeholder="Paste Google Drive file link">
+
+  <button id="submitBtn" type="button" onclick="submitRequest()">Submit Request</button>
+</div>
+      <!-- LOADING -->
+      <div id="loadingBox" style="display:none; text-align:center; margin-top:15px;">
+        <div class="loader"></div>
+        <p>Submitting request... Please wait</p>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div id="overlayLoader" class="overlay" style="display:none;">
+  <div class="overlay-content">
+    <div class="loader"></div>
+    <p>Submitting request... Please wait</p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

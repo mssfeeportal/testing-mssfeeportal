@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <div class="login-card">
+      <h2>🔐 Admin Dashboard</h2>
+      <p class="login-sub">Enter admin password</p>
+
+      <div class="password-wrapper">
+        <input type="password" id="adminPassword" placeholder="Admin Password">
+        <span class="toggle-eye" onclick="togglePassword()">👁️</span>
+      </div>
+
+      <button onclick="adminLogin()">Login</button>
+
+      <p class="back-link">
+        <a href="index.html">← Back to Home</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none">
+
+    <div class="dashboard-header">
+      <h2>📊 Admin Dashboard</h2>
+      <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="cards">
+      <div class="card">
+        <h1 id="pendingCount">0</h1>
+        <p>Pending</p>
+      </div>
+      <div class="card">
+        <h1 id="completedCount">0</h1>
+        <p>Completed</p>
+      </div>
+      <div class="card">
+        <h1 id="totalCount">0</h1>
+        <p>Total</p>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="download-section">
+      <h3>📥 Student Master</h3>
+      <button onclick="downloadStudentMaster()">⬇ Download Student Excel</button>
+    </div>
+
+    <div class="download-section">
+      <h3>📥 Requests Data</h3>
+
+      <div class="date-filter-row">
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+        <button onclick="downloadRequestsWithDateFilter()">Apply Filter</button>
+      </div>
+
+      <button onclick="downloadAllRequests()">⬇ Download All Requests</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

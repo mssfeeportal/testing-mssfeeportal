@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Medha Financial System</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- NEW WRAPPER -->
+<div class="landing-wrapper">
+
+  <div class="hero">
+    <h1>MSS Students Fee Request System </h1>
+    <p class="subtitle">STUDENT PORTAL</p>
+
+    <div class="card-container">
+      <div class="landing-card student" onclick="location.href='student.html'" title="For students to submit requests">
+        👩‍🎓 Student Portal
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-access">
+    <p class="footer-text">Admin access available at: <span id="adminUrl" style="font-weight: bold; color: #1a73e8;">Click to access</span></p>
+  </div>
+
+</div>
+
+<script>
+  // Generate secure admin token
+  function generateAdminToken() {
+    const date = new Date().toISOString().split('T')[0];
+    const token = btoa(date + '_medha_admin_secure');
+    return token;
+  }
+
+  document.getElementById('adminUrl').style.cursor = 'pointer';
+  document.getElementById('adminUrl').onclick = function() {
+    const token = generateAdminToken();
+    window.location.href = 'admin.html?auth=' + token;
+  };
+</script>
+
+</body>
+</html>

@@ -303,3 +303,20 @@ button:hover {
     transform: rotate(360deg);
   }
 }
+/* Group Member Spacing */
+.memberBox {
+  background: #f9fafc;
+  padding: 18px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  border: 1px solid #e0e0e0;
+}
+
+.memberBox input,
+.memberBox select {
+  margin-bottom: 12px;
+}
+
+.memberBox button {
+  margin-bottom: 12px;
+}

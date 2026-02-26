@@ -6,8 +6,8 @@
  CONFIGURATION
 ************************/
 const ADMIN_EMAIL = "mssc1@medhatrust.org";
-const STUDENT_SHEET_ID = "1eEiktXg_yZCac0EZk9ZtWzonQtpNTGKJ4DoEGyobybw";
-const REQUEST_SHEET_ID = "1J3BqxjpEw2ZhNo3DY_-5TNkaBKNrIgKqLEPXuxa4_eY";
+const STUDENT_SHEET_ID = "152IsL4_2lLLn4qHGkMLy2LxkJ27c3FzLZlOocOW-DTM";
+const REQUEST_SHEET_ID = "18TJg7T4Stf8FWWfhNyOfNJztDsLy20jSVNR-SgliOIk";
 const STUDENT_SHEET_NAME = "Student_DB";
 const REQUEST_SHEET_NAME = "Requests_DB";
 
@@ -98,23 +98,27 @@ function doPost(e) {
   const mainAmount = e.parameter.amount;
 
   // 🔹 STORE MAIN REQUEST (Individual or Requesting Student)
+  // ================= INDIVIDUAL =================
+if (e.parameter.requestType === "Individual") {
+
   sh.appendRow([
-    reqId,                     // 0
-    now,                       // 1
-    e.parameter.mssid,         // 2
-    e.parameter.name,          // 3
-    e.parameter.year,          // 4
-    e.parameter.college,       // 5
-    requestType,               // 6
-    requestType === "Individual" ? mainAmount : "", // 7
-    e.parameter.category,      // 8
-    e.parameter.subCategory,   // 9
-    e.parameter.paymentMode,   // 10
-    e.parameter.details,       // 11
-    e.parameter.dueDate,       // 12
-    e.parameter.attachmentLink || "", // 13
-    "Pending"                  // 14
+    reqId,
+    now,
+    e.parameter.mssid,
+    e.parameter.name,
+    e.parameter.year,
+    e.parameter.college,
+    "Individual",
+    e.parameter.amount,
+    e.parameter.category,
+    e.parameter.subCategory,
+    e.parameter.paymentMode,
+    e.parameter.details,
+    e.parameter.dueDate,
+    e.parameter.attachmentLink || "",
+    "Pending"
   ]);
+}
 
   // 🔹 GROUP MEMBERS
   let members = [];
@@ -142,7 +146,7 @@ function doPost(e) {
         e.parameter.paymentMode,
         e.parameter.details,
         e.parameter.dueDate,
-        "",
+        e.parameter.attachmentLink || "",
         "Pending"
       ]);
     });
@@ -198,7 +202,17 @@ function sendAdminNotification(d) {
 
   try {
 
-    const groupSection = d.groupMembers.length
+    const isIndividual = d.requestType === "Individual";
+
+    const studentSection = isIndividual ? `
+        <p><b>Name:</b> ${d.name}</p>
+        <p><b>MSS ID:</b> ${d.mssid}</p>
+        <p><b>College:</b> ${d.college}</p>
+        <p><b>Year:</b> ${d.year}</p>
+        <p><b>Amount:</b> ₹${d.amount}</p>
+    ` : "";
+
+    const groupSection = (!isIndividual && d.groupMembers.length)
       ? `
         <p><b>Group Members:</b></p>
         <ul>
@@ -213,16 +227,14 @@ function sendAdminNotification(d) {
       <div style="font-family: Arial;">
         <h2>📋 New Student Request</h2>
         <p><b>Request ID:</b> ${d.reqId}</p>
-        <p><b>Name:</b> ${d.name}</p>
-        <p><b>MSS ID:</b> ${d.mssid}</p>
-        <p><b>College:</b> ${d.college}</p>
-        ${d.requestType === "Individual"
-          ? `<p><b>Amount:</b> ₹${d.amount}</p>`
-          : ""}
+
+        ${studentSection}
+
         <p><b>Category:</b> ${d.category}</p>
         <p><b>Sub-Category:</b> ${d.subCategory}</p>
         <p><b>Due Date:</b> ${d.dueDate}</p>
         ${d.details ? `<p><b>Details:</b> ${d.details}</p>` : ""}
+
         ${groupSection}
       </div>
     `;

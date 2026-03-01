@@ -5,7 +5,11 @@
 /***********************
  CONFIGURATION
 ************************/
-const ADMIN_EMAIL = "mssc1@medhatrust.org";
+const ADMIN_EMAILS = [
+  "mssc1@medhatrust.org",
+  "mssc2@medhatrust.org",
+  "mssc4@medhatrust.org"
+];
 const STUDENT_SHEET_ID = "152IsL4_2lLLn4qHGkMLy2LxkJ27c3FzLZlOocOW-DTM";
 const REQUEST_SHEET_ID = "18TJg7T4Stf8FWWfhNyOfNJztDsLy20jSVNR-SgliOIk";
 const STUDENT_SHEET_NAME = "Student_DB";
@@ -239,11 +243,11 @@ function sendAdminNotification(d) {
       </div>
     `;
 
-    MailApp.sendEmail({
-      to: ADMIN_EMAIL,
-      subject: `🔔 New Request ${d.reqId}`,
-      htmlBody: html
-    });
+   MailApp.sendEmail({
+  to: ADMIN_EMAILS.join(","),
+  subject: `🔔 New Request ${d.reqId}`,
+  htmlBody: html
+});
 
   } catch (err) {
     Logger.log("Email error: " + err);

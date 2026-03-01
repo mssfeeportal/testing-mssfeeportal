@@ -1,4 +1,4 @@
-const BASE_URL = "https://script.google.com/macros/s/AKfycbx21Y-ZjTWbsWSzzbceJJOoBHShbJrMP12GLbd95cbx-FJ9emUx3OPxjP-hi1v9vC2w/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbxKejMGfWWKnRIBrNoRcppGLMdR0zBvAKd24Fzy0m2IAMGDV3G3hdgv_kvFbe8Ltjjb/exec";
 
 let groupMembers = [];
 
@@ -144,11 +144,21 @@ const paymentData = {
     "DOST Counselling"
   ],
 
+  "Transportation Charges": [
+  "Daily Travel",
+  "Bus Pass",
+  "Vacation Travel",
+  "Volunteering Travel",
+  "Contest Travel",
+  "Others"
+],
+
   "Post-Graduate Coaching": [
     "GATE Coaching",
     "NEET PG Coaching",
     "Study Material / Marrow"
   ]
+  
 };
 
 /* ================= LOAD CATEGORIES ================= */

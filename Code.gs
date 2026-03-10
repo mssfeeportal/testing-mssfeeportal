@@ -7,13 +7,11 @@
 ************************/
 const ADMIN_EMAILS = [
   "mssc1@medhatrust.org",
-  "mssc2@medhatrust.org",
-  "mssc4@medhatrust.org"
 ];
-const STUDENT_SHEET_ID = "152IsL4_2lLLn4qHGkMLy2LxkJ27c3FzLZlOocOW-DTM";
-const REQUEST_SHEET_ID = "18TJg7T4Stf8FWWfhNyOfNJztDsLy20jSVNR-SgliOIk";
-const STUDENT_SHEET_NAME = "Student_DB";
-const REQUEST_SHEET_NAME = "Requests_DB";
+const STUDENT_SHEET_ID = "1D2odNEPFjpE3LO3-ccQuU6MqLgneAfRSFeml0DPClks";
+const REQUEST_SHEET_ID = "1A9GvsStTFvU-I7aavQYBjPmT77Gah32cVyqw_uAkTA8";
+const STUDENT_SHEET_NAME = "Test-student";
+const REQUEST_SHEET_NAME = "Test-request";
 
 /***********************
  JSON HELPER
@@ -135,25 +133,29 @@ if (e.parameter.requestType === "Individual") {
       members = [];
     }
 
-    members.forEach(m => {
-      sh.appendRow([
-        reqId,
-        now,
-        m.mssid,
-        m.name,
-        m.year,
-        m.college,
-        "Group",
-        m.amount || "",  // ✅ separate amount
-        e.parameter.category,
-        e.parameter.subCategory,
-        e.parameter.paymentMode,
-        e.parameter.details,
-        e.parameter.dueDate,
-        e.parameter.attachmentLink || "",
-        "Pending"
-      ]);
-    });
+   members.forEach(m => {
+
+  const amount = m.amount ? m.amount : "";
+
+  sh.appendRow([
+    reqId,
+    now,
+    m.mssid,
+    m.name,
+    m.year,
+    m.college,
+    "Group",
+    amount,
+    e.parameter.category,
+    e.parameter.subCategory,
+    e.parameter.paymentMode,
+    e.parameter.details,
+    e.parameter.dueDate,
+    e.parameter.attachmentLink || "",
+    "Pending"
+  ]);
+
+});
   }
 
   // 🔹 EMAIL
@@ -181,24 +183,44 @@ if (e.parameter.requestType === "Individual") {
 ************************/
 function generateRequestId() {
 
-  const sh = SpreadsheetApp
-    .openById(REQUEST_SHEET_ID)
-    .getSheetByName(REQUEST_SHEET_NAME);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000); // wait up to 30 seconds if another request is generating an ID
 
-  const month = Utilities.formatDate(
-    new Date(),
-    Session.getScriptTimeZone(),
-    "yyyyMMM"
-  );
+  try {
 
-  const ids = sh.getRange(2, 1, sh.getLastRow()).getValues();
-  const count = ids
-    .filter(r => r[0] && String(r[0]).includes(month))
-    .length + 1;
+    const sh = SpreadsheetApp
+      .openById(REQUEST_SHEET_ID)
+      .getSheetByName(REQUEST_SHEET_NAME);
 
-  return `MSS-${month}-${String(count).padStart(2, "0")}`;
+    const month = Utilities.formatDate(
+      new Date(),
+      Session.getScriptTimeZone(),
+      "yyyyMMM"
+    );
+
+    const lastRow = sh.getLastRow();
+
+    // first request in sheet
+    if (lastRow < 2) {
+      return `MSS-${month}-01`;
+    }
+
+    const lastId = sh.getRange(lastRow, 1).getValue();
+
+    // if month changed, restart numbering
+    if (!lastId || !String(lastId).includes(month)) {
+      return `MSS-${month}-01`;
+    }
+
+    const lastNumber = parseInt(lastId.split("-")[2], 10);
+    const newNumber = lastNumber + 1;
+
+    return `MSS-${month}-${String(newNumber).padStart(2, "0")}`;
+
+  } finally {
+    lock.releaseLock();
+  }
 }
-
 /***********************
  EMAIL NOTIFICATION
 ************************/

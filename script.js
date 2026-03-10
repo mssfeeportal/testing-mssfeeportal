@@ -1,4 +1,4 @@
-const BASE_URL = "https://script.google.com/macros/s/AKfycbxKejMGfWWKnRIBrNoRcppGLMdR0zBvAKd24Fzy0m2IAMGDV3G3hdgv_kvFbe8Ltjjb/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyYeI2YKrbd1fjS5w4U7-oTHEP6wbF3rOD9I_OOEc_8haJ5bxGzGWExiZcjPEC84UzXKw/exec";
 
 let groupMembers = [];
 
@@ -372,28 +372,40 @@ function submitRequest() {
   }
 
   // ================= GROUP VALIDATION =================
-  if (type === "Group") {
+ if (type === "Group") {
 
-    const count = parseInt(document.getElementById("groupCount").value);
+  const count = parseInt(document.getElementById("groupCount").value);
 
-    if (!count || count <= 0) {
-      alert("Enter group member count");
+  if (!count || count <= 0) {
+    alert("Enter group member count");
+    return;
+  }
+
+  // rebuild groupMembers fresh before submit
+  groupMembers = [];
+
+  for (let i = 0; i < count; i++) {
+
+    const mssid = document.getElementById(`gm_mssid_${i}`).value.trim();
+    const year = document.getElementById(`gm_year_${i}`).value.trim();
+    const amount = document.getElementById(`gm_amount_${i}`).value.trim();
+    const name = document.getElementById(`gm_name_${i}`).value.trim();
+    const college = document.getElementById(`gm_college_${i}`).value.trim();
+
+    if (!mssid || !year || !amount || !name || !college) {
+      alert(`Fill all details for Group Member ${i + 1}`);
       return;
     }
 
-    for (let i = 0; i < count; i++) {
-
-      if (!document.getElementById(`gm_mssid_${i}`).value.trim() ||
-          !document.getElementById(`gm_year_${i}`).value.trim() ||
-          !document.getElementById(`gm_amount_${i}`).value.trim() ||
-          !document.getElementById(`gm_name_${i}`).value.trim() ||
-          !document.getElementById(`gm_college_${i}`).value.trim()) {
-
-        alert(`Fill all details for Group Member ${i + 1}`);
-        return;
-      }
-    }
+    groupMembers.push({
+      mssid: mssid,
+      year: year,
+      amount: amount,
+      name: name,
+      college: college
+    });
   }
+}
 
   // ================= PAYMENT VALIDATION =================
   // ================= PAYMENT VALIDATION =================
